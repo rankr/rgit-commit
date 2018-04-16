@@ -848,7 +848,8 @@ def clear_all_commit():
 	for i in check_path:
 		a = os.path.join('./commit_store', i)
 		for j in os.listdir(a):
-			os.remove(os.path.join('./commit_store', i, j))
+			if j != '.gitkeep':
+				os.remove(os.path.join('./commit_store', i, j))
 
 def deparse_commit(data):
 	a = data.split(',')
