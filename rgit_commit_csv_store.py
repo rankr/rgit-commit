@@ -252,16 +252,16 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 	csv_files = os.listdir(commit_store_path)
 	if 'to_write' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'to_write')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
 	if 'rgit_commit_main.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.close()
 	if 'rgit_commit_hash8.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_hash8.csv')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write(','.join(['hash8+1','name_email_str\n']))
 		w.close()
 
@@ -269,13 +269,6 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 	ret = []
 	for i, j in idx_pack_pairs:
 		ret.extend(commitFromPack(i, j))
-	
-	print 'first 5 sha are:\n'
-	for x in range(0, 5):
-		print '\n',ret[x],'\n'
-	print '\n'
-	debug_cnt = 0
-	debug = []
 
 	f = open(os.path.join(commit_store_path, 'to_write'))
 	a = f.readline().split(',')
@@ -294,10 +287,10 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 		a = a.strip().split(',')
 		hash8[a[0]] = a[1]
 	f.close()
-	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'a')
+	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'ab')
 
 	#for now most 50000 commits in one file
-	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'a')
+	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
 	for sha, raw_data in ret:
@@ -307,7 +300,7 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 			indexpath = ''.join(['index', sha[0:2]])
 			if indexpath not in csv_files:
 				temp = set()
-				f = open(os.path.join(commit_store_path, indexpath), 'w')
+				f = open(os.path.join(commit_store_path, indexpath), 'wb')
 				f.close()
 			else:
 				f = open(os.path.join(commit_store_path, indexpath))
@@ -320,7 +313,7 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 					temp.add(a[0])
 				f.close()
 
-			f = open(os.path.join(commit_store_path, indexpath), 'a')
+			f = open(os.path.join(commit_store_path, indexpath), 'ab')
 			h[sha[0:2]] = INDEX_AND_NEW(file = f, set = temp)
 		if sha[2:] in h[sha[0:2]].set:#already exists
 			continue
@@ -363,10 +356,7 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 		head = int2msb(len(write_str))
 		
 		content = ''.join([head, write_str])
-		
-		if debug_cnt<5:
-			debug.append((sha, write_str, content, head))
-		debug_cnt += 1
+
 		w.write(content)
 		already_store += 1
 		offset += len(content)
@@ -376,15 +366,14 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 			offset = 0
 			w.close()
 			new_file_path = os.path.join(commit_store_path, 'rgit_commit_main%d'%(which))
-			w = open(new_file_path, 'w')
-	f = open(os.path.join(commit_store_path, 'to_write'), 'w')
+			w = open(new_file_path, 'wb')
+	f = open(os.path.join(commit_store_path, 'to_write'), 'wb')
 	f.write("%d,%d,%d"%(which, already_store, offset))
 	f.close()
 	hash8_file.close()
 	for i in h:
 		h[i].file.close()
 	w.close()
-	return debug
 	return 1
 
 
@@ -396,16 +385,16 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 	csv_files = os.listdir(commit_store_path)
 	if 'to_write' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'to_write')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
 	if 'rgit_commit_main' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.close()
 	if 'rgit_commit_hash8.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_hash8.csv')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write(','.join(['hash8+1','name_email_str\n']))
 		w.close()
 
@@ -431,11 +420,11 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 		a = a.strip().split(',')
 		hash8[a[0]] = a[1]
 	f.close()
-	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'a')
+	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'ab')
 
 
 	#each file store 50000 commits for now
-	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'a')
+	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
 	for sha, raw_data in ret:
@@ -445,7 +434,7 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 			indexpath = ''.join(['index', sha[0:2]])
 			if indexpath not in csv_files:
 				temp = set()
-				f = open(os.path.join(commit_store_path, indexpath), 'w')
+				f = open(os.path.join(commit_store_path, indexpath), 'wb')
 				f.close()
 			else:
 				f = open(os.path.join(commit_store_path, indexpath))
@@ -458,7 +447,7 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 					temp.add(a[0])
 				f.close()
 
-			f = open(os.path.join(commit_store_path, indexpath), 'a')
+			f = open(os.path.join(commit_store_path, indexpath), 'ab')
 			h[sha[0:2]] = INDEX_AND_NEW(file = f, set = temp)
 		#if sha[2:] in h[sha[0:2]].set:#already exists
 		#	continue
@@ -510,8 +499,8 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 			offset = 0
 			w.close()
 			new_file_path = os.path.join(commit_store_path, 'rgit_commit_main%d'%(which))
-			w = open(new_file_path, 'w')
-	f = open(os.path.join(commit_store_path, 'to_write'), 'w')
+			w = open(new_file_path, 'wb')
+	f = open(os.path.join(commit_store_path, 'to_write'), 'wb')
 	f.write("%d,%d,%d"%(which, already_store, offset))
 	f.close()
 	hash8_file.close()
@@ -528,16 +517,16 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 	csv_files = os.listdir(commit_store_path)
 	if 'to_write' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'to_write')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
 	if 'rgit_commit_main.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.close()
 	if 'rgit_commit_hash8.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_hash8.csv')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write(','.join(['hash8+1','name_email_str\n']))
 		w.close()
 
@@ -563,10 +552,10 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 		a = a.strip().split(',')
 		hash8[a[0]] = a[1]
 	f.close()
-	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'a')
+	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'ab')
 
 	#暂且定为每个5万条commit
-	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'a')
+	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
 	for sha, raw_data in ret:
@@ -576,7 +565,7 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 			indexpath = ''.join(['index', sha[0:2]])
 			if indexpath not in csv_files:
 				temp = set()
-				f = open(os.path.join(commit_store_path, indexpath), 'w')
+				f = open(os.path.join(commit_store_path, indexpath), 'wb')
 				f.close()
 			else:
 				f = open(os.path.join(commit_store_path, indexpath))
@@ -589,7 +578,7 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 					temp.add(a[0])
 				f.close()
 
-			f = open(os.path.join(commit_store_path, indexpath), 'a')
+			f = open(os.path.join(commit_store_path, indexpath), 'ab')
 			h[sha[0:2]] = INDEX_AND_NEW(file = f, set = temp)
 		if sha[2:] in h[sha[0:2]].set:#already exists
 			continue
@@ -642,8 +631,8 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 			offset = 0
 			w.close()
 			new_file_path = os.path.join(commit_store_path, 'rgit_commit_main%d'%(which))
-			w = open(new_file_path, 'w')
-	f = open(os.path.join(commit_store_path, 'to_write'), 'w')
+			w = open(new_file_path, 'wb')
+	f = open(os.path.join(commit_store_path, 'to_write'), 'wb')
 	f.write("%d,%d,%d"%(which, already_store, offset))
 	f.close()
 	hash8_file.close()
@@ -661,12 +650,12 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 	csv_files = os.listdir(commit_store_path)
 	if 'to_write' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'to_write')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
 	if 'rgit_commit_main.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.close()
 
 	idx_pack_pairs = idx_pack_from_repo(git_repo_path)
@@ -682,7 +671,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 	f.close()
 
 	#暂且定为每个5万条commit
-	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'a')
+	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
 	for sha, raw_data in ret:
@@ -692,7 +681,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 			indexpath = ''.join(['index', sha[0:2]])
 			if indexpath not in csv_files:
 				temp = set()
-				f = open(os.path.join(commit_store_path, indexpath), 'w')
+				f = open(os.path.join(commit_store_path, indexpath), 'wb')
 				f.close()
 			else:
 				f = open(os.path.join(commit_store_path, indexpath))
@@ -705,7 +694,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 					temp.add(a[0])
 				f.close()
 
-			f = open(os.path.join(commit_store_path, indexpath), 'a')
+			f = open(os.path.join(commit_store_path, indexpath), 'ab')
 			h[sha[0:2]] = INDEX_AND_NEW(file = f, set = temp)
 		if sha[2:] in h[sha[0:2]].set:#already exists
 			continue
@@ -730,8 +719,8 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 			offset = 0
 			w.close()
 			new_file_path = os.path.join(commit_store_path, 'rgit_commit_main%d'%(which))
-			w = open(new_file_path, 'w')
-	f = open(os.path.join(commit_store_path, 'to_write'), 'w')
+			w = open(new_file_path, 'wb')
+	f = open(os.path.join(commit_store_path, 'to_write'), 'wb')
 	f.write("%d,%d,%d"%(which, already_store, offset))
 	f.close()
 	for i in h:
@@ -748,12 +737,12 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 	csv_files = os.listdir(commit_store_path)
 	if 'to_write' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'to_write')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
 	if 'rgit_commit_main.csv' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
-		w = open(new_file_path, 'w')
+		w = open(new_file_path, 'wb')
 		w.close()
 
 	idx_pack_pairs = idx_pack_from_repo(git_repo_path)
@@ -769,7 +758,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 	f.close()
 
 	#暂且定为每个5万条commit
-	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'a')
+	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
 	for sha, raw_data in ret:
@@ -779,7 +768,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 			indexpath = ''.join(['index', sha[0:2]])
 			if indexpath not in csv_files:
 				temp = set()
-				f = open(os.path.join(commit_store_path, indexpath), 'w')
+				f = open(os.path.join(commit_store_path, indexpath), 'wb')
 				f.close()
 			else:
 				f = open(os.path.join(commit_store_path, indexpath))
@@ -792,7 +781,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 					temp.add(a[0])
 				f.close()
 
-			f = open(os.path.join(commit_store_path, indexpath), 'a')
+			f = open(os.path.join(commit_store_path, indexpath), 'ab')
 			h[sha[0:2]] = INDEX_AND_NEW(file = f, set = temp)
 		#if sha[2:] in h[sha[0:2]].set:#already exists
 		#	continue
@@ -817,8 +806,8 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 			offset = 0
 			w.close()
 			new_file_path = os.path.join(commit_store_path, 'rgit_commit_main%d'%(which))
-			w = open(new_file_path, 'w')
-	f = open(os.path.join(commit_store_path, 'to_write'), 'w')
+			w = open(new_file_path, 'wb')
+	f = open(os.path.join(commit_store_path, 'to_write'), 'wb')
 	f.write("%d,%d,%d"%(which, already_store, offset))
 	f.close()
 	for i in h:
@@ -863,12 +852,13 @@ def clear_all_commit():
 
 def deparse_commit(data):
 	a = data.split(',')
-	csv_file = pd.read_csv('./commit_store/commit/rgit_commit_hash8.csv')
-	author = list[csv_file[csv_file['hash8+1'] == a[3]]][1]
-	committer = list[csv_file[csv_file['hash8+1'] == a[5]]][1]
+	
+	csv_file = pd.read_csv('./commit_store/commit/rgit_commit_hash8.csv').set_index('hash8+1')
+	author = list(csv_file.loc[a[3]])[0]
+	committer = list(csv_file.loc[a[5]])[0]
 	if a[2]:
 		a[2] = "parent %s\n"%(a[2])
-	return "tree %s\nparent %s\n%sauthor %s %s\ncommitter %s %s\n%s"%(a[0], a[1], a[2], author, a[4], committer, a[6], a[7])
+	return "tree %s\nparent %s\n%sauthor %s %s\ncommitter %s %s\n%s"%(a[0], a[1], a[2], author, a[4], committer, a[6], ','.join(a[7:]))
 	
 def recover_commit(sha):
 	store_path = './commit_store/commit/index%s'%(sha[0:2])
@@ -907,5 +897,20 @@ def recover_commit(sha):
 	to_process = zlib.decompress(f.read(size))
 	f.close()
 	
-	print deparse_commit(to_process)
+	after_deparse = deparse_commit(to_process)
+	
+	print after_deparse
+	
+	
+def commit_print_stat():
+	print "this program deduplicate commits with three rules:\n"
+	print "\tRule 1. Remove the same commit from different repository"
+	print "\tRule 2. Remove structure info in commits, such as 'author', 'committer' string in each commit"
+	print '\tRule 3. Replace developer messages in commits with shorter string'
+	print '\n'
+	print "With all rules applied, it takes %d byte storage\n"%(dirSize('./commit_store/commit'))
+	print "With rule 1, 2 applied, it takes %d byte storage\n"%(dirSize('./commit_store/commit_struc_dup'))
+	print "With rule 1, 3 applied, it takes %d byte storage\n"%(dirSize('./commit_store/commit_developer_dup'))
+	print "With rule 2, 3 applied, it takes %d byte storage\n"%(dirSize('./commit_store/commit_developer_dup'))
+	print "Without any rules applied, it takes %d byte storage\n"%(dirSize('./commit_store/commit_all_dup'))
 	
