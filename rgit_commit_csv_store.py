@@ -255,7 +255,7 @@ def rgit_commit_csv_store(git_repo_path, commit_store_path = './commit_store/com
 		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
-	if 'rgit_commit_main.csv' not in csv_files:
+	if 'rgit_commit_main0' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
 		w = open(new_file_path, 'wb')
 		w.close()
@@ -388,7 +388,7 @@ def rgit_commit_csv_store_cmt_dup(git_repo_path, commit_store_path = './commit_s
 		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
-	if 'rgit_commit_main' not in csv_files:
+	if 'rgit_commit_main0' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
 		w = open(new_file_path, 'wb')
 		w.close()
@@ -520,7 +520,7 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
-	if 'rgit_commit_main.csv' not in csv_files:
+	if 'rgit_commit_main0' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
 		w = open(new_file_path, 'wb')
 		w.close()
@@ -554,7 +554,7 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 	f.close()
 	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'ab')
 
-	#暂且定为每个5万条commit
+	#for now 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
@@ -653,7 +653,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
-	if 'rgit_commit_main.csv' not in csv_files:
+	if 'rgit_commit_main0' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
 		w = open(new_file_path, 'wb')
 		w.close()
@@ -670,7 +670,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 	offset = int(a[2])
 	f.close()
 
-	#暂且定为每个5万条commit
+	#for now 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
@@ -740,7 +740,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 		w = open(new_file_path, 'wb')
 		w.write('0,0,0') #which number of csv to write, and how many it has had, and offset it will begin
 		w.close()
-	if 'rgit_commit_main.csv' not in csv_files:
+	if 'rgit_commit_main0' not in csv_files:
 		new_file_path = os.path.join(commit_store_path, 'rgit_commit_main0')
 		w = open(new_file_path, 'wb')
 		w.close()
@@ -757,7 +757,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 	offset = int(a[2])
 	f.close()
 
-	#暂且定为每个5万条commit
+	#for now, 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
