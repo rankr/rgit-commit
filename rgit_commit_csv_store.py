@@ -554,7 +554,7 @@ def rgit_commit_csv_store_struc_dup(git_repo_path, commit_store_path = './commit
 	f.close()
 	hash8_file = open(os.path.join(commit_store_path, 'rgit_commit_hash8.csv'), 'ab')
 
-	#for now 50000 files per file
+	#for now 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
@@ -670,7 +670,7 @@ def rgit_commit_csv_store_developer_dup(git_repo_path, commit_store_path = './co
 	offset = int(a[2])
 	f.close()
 
-	#for now 50000 commit per file
+	#for now 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
@@ -757,7 +757,7 @@ def rgit_commit_csv_store_all_dup(git_repo_path, commit_store_path = './commit_s
 	offset = int(a[2])
 	f.close()
 
-	#for now, 50000 commit per file
+	#for now, 50000 commits per file
 	w = open(''.join([commit_store_path, '/rgit_commit_main', str(which)]), 'ab')
 	h = {}
 	test_cmpr = []
